@@ -5,10 +5,13 @@ class group_screen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Group Screen',
-        style: TextStyle(fontSize: 24),
+    return Container(
+      decoration: BoxDecoration(color: Colors.white),
+      child: Center(
+        child: Text(
+          'Group Screen',
+          style: TextStyle(fontSize: 24),
+        ),
       ),
     );
   }

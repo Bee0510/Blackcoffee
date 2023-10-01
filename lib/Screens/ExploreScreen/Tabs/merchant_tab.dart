@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:netclan/Screens/Components/button.dart';
 import 'package:netclan/Screens/Components/floating_action.dart';
+import 'package:netclan/Screens/RefineScreen/refine_screen.dart';
 import 'package:netclan/Utils/Strings.dart';
 import 'package:netclan/Utils/size_configure.dart';
 import '../../Components/blur_back.dart';
@@ -26,7 +27,7 @@ class _merchant_tabState extends State<merchant_tab>
   @override
   void initState() {
     _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500))
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300))
           ..addListener(() {
             setState(() {});
           });
@@ -116,12 +117,20 @@ class _merchant_tabState extends State<merchant_tab>
             ),
             SizedBox(height: 20),
             Center(
-              child: button(formkey: _formkey, title: 'INCREASE RADIUS'),
+              child: button(
+                formkey: _formkey,
+                title: 'INCREASE RADIUS',
+                fun: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => refine_screen()));
+                },
+              ),
             )
           ],
         ),
         _isExpanded ? blur_back() : Container(),
-        floating_button(_toggle, _buttonAnimation, _translateButton)
+        floating_button(
+            _toggle, _buttonAnimation, _translateButton, _isExpanded)
       ],
     );
   }

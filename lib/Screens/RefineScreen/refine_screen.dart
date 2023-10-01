@@ -14,10 +14,12 @@ class refine_screen extends StatefulWidget {
 
 class _refine_screenState extends State<refine_screen> {
   final _formkey = GlobalKey<FormState>();
+  final textColor = Color.fromARGB(255, 6, 5, 63);
   final TextEditingController iconController = TextEditingController();
   final TextEditingController statusController = TextEditingController(
       text: 'Hi Community, I am open to new connections.');
   IconLabel? selectedIcon;
+  int count = 0;
   int _currentStrength = 1;
   bool sample1Toggled = false;
   bool sample2Toggled = false;
@@ -27,11 +29,26 @@ class _refine_screenState extends State<refine_screen> {
   bool sample6Toggled = false;
   bool sample7Toggled = false;
   bool sample8Toggled = false;
+
+  @override
+  void initState() {
+    statusController.addListener(() {
+      setState(() {
+        count = statusController.text.length;
+      });
+    });
+    super.initState();
+  }
+
   @override
   void dispose() {
     statusController.dispose();
     iconController.dispose();
     super.dispose();
+  }
+
+  int getCount(String text) {
+    return text.length;
   }
 
   @override
@@ -43,6 +60,8 @@ class _refine_screenState extends State<refine_screen> {
           .add(DropdownMenuEntry<IconLabel>(value: icon, label: icon.label));
     }
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colour.primaryColor,
         title: Text('Refine'),
@@ -52,74 +71,98 @@ class _refine_screenState extends State<refine_screen> {
             },
             icon: Icon(Icons.arrow_back_ios)),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-        child: Form(
-          key: _formkey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'Select Your Availability',
-                style: TextStyle(
-                    fontSize: 16,
-                    color: const Color.fromARGB(156, 3, 20, 31),
-                    fontWeight: FontWeight.w600),
-              ),
-              dropdownbox(iconEntries),
-              SizedBox(height: 20),
-              Text(
-                'Add Your Status',
-                style: TextStyle(
-                    fontSize: 16,
-                    color: const Color.fromARGB(156, 3, 20, 31),
-                    fontWeight: FontWeight.w600),
-              ),
-              status(),
-              SizedBox(height: 20),
-              Text(
-                'Select Hybrid Local Distance',
-                style: TextStyle(
-                    fontSize: 16,
-                    color: const Color.fromARGB(156, 3, 20, 31),
-                    fontWeight: FontWeight.w600),
-              ),
-              SizedBox(height: getVerticalSize(32)),
-              slider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '1 Km',
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
+      body: Container(
+        decoration: BoxDecoration(color: Colors.white),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          child: Form(
+            key: _formkey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Select Your Availability',
+                  style: TextStyle(
+                      fontSize: getSize(15),
+                      color: textColor,
+                      fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: 10),
+                dropdownbox(iconEntries),
+                SizedBox(height: 20),
+                Text(
+                  'Add Your Status',
+                  style: TextStyle(
+                      fontSize: getSize(15),
+                      color: textColor,
+                      fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    status(),
+                    SizedBox(height: 3),
+                    Text(
+                      count.toString() + '/250',
+                      style: TextStyle(
+                        fontSize: getSize(14),
+                        color: textColor,
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Select Hybrid Local Distance',
+                  style: TextStyle(
+                      fontSize: getSize(15),
+                      color: textColor,
+                      fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: getVerticalSize(32)),
+                slider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '1 Km',
+                      style: TextStyle(fontSize: getSize(14), color: textColor),
+                    ),
+                    Text(
+                      '100 Km',
+                      style: TextStyle(fontSize: getSize(14), color: textColor),
+                    )
+                  ],
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Select Purpose',
+                  style: TextStyle(
+                      fontSize: getSize(15),
+                      color: textColor,
+                      fontWeight: FontWeight.w600),
+                ),
+                SizedBox(height: 10),
+                Column(
+                  children: [
+                    purposebox(),
+                    purposebox2(),
+                    purposebox3(),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Center(
+                  child: button(
+                    formkey: _formkey,
+                    title: 'SAVE & EXPLORE',
+                    fun: () {
+                      _formkey.currentState!.save();
+                    },
                   ),
-                  Text(
-                    '100 Km',
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
-                  )
-                ],
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Select Purpose',
-                style: TextStyle(
-                    fontSize: 16,
-                    color: const Color.fromARGB(156, 3, 20, 31),
-                    fontWeight: FontWeight.w600),
-              ),
-              SizedBox(height: 10),
-              Column(
-                children: [
-                  purposebox(),
-                  purposebox2(),
-                  purposebox3(),
-                ],
-              ),
-              SizedBox(height: 20),
-              Center(
-                child: button(formkey: _formkey, title: 'SAVE AND CONTINUE'),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -138,7 +181,7 @@ class _refine_screenState extends State<refine_screen> {
           Container(
             padding: getPadding(left: 18, top: 5, right: 18, bottom: 5),
             decoration: BoxDecoration(
-              color: sample1Toggled ? Colors.black : Colors.white,
+              color: sample1Toggled ? textColor : Colors.white,
               borderRadius: BorderRadius.circular(30),
               border: Border.all(
                 color: Colors.grey,
@@ -158,8 +201,8 @@ class _refine_screenState extends State<refine_screen> {
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                  color: sample1Toggled ? Colors.white : Colors.grey,
-                  fontSize: 16,
+                  color: sample1Toggled ? Colors.white : textColor,
+                  fontSize: getSize(15),
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -169,7 +212,7 @@ class _refine_screenState extends State<refine_screen> {
           Container(
             padding: getPadding(left: 16, top: 5, right: 16, bottom: 5),
             decoration: BoxDecoration(
-              color: sample2Toggled ? Colors.black : Colors.white,
+              color: sample2Toggled ? textColor : Colors.white,
               borderRadius: BorderRadius.circular(30),
               border: Border.all(
                 color: Colors.grey,
@@ -189,8 +232,8 @@ class _refine_screenState extends State<refine_screen> {
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                  color: sample2Toggled ? Colors.white : Colors.grey,
-                  fontSize: 16,
+                  color: sample2Toggled ? Colors.white : textColor,
+                  fontSize: getSize(15),
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -200,7 +243,7 @@ class _refine_screenState extends State<refine_screen> {
           Container(
             padding: getPadding(left: 17, top: 5, right: 17, bottom: 5),
             decoration: BoxDecoration(
-              color: sample3Toggled ? Colors.black : Colors.white,
+              color: sample3Toggled ? textColor : Colors.white,
               borderRadius: BorderRadius.circular(30),
               border: Border.all(
                 color: Colors.grey,
@@ -219,8 +262,8 @@ class _refine_screenState extends State<refine_screen> {
                 "Hobbies",
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: sample3Toggled ? Colors.white : Colors.grey,
-                  fontSize: 16,
+                  color: sample3Toggled ? Colors.white : textColor,
+                  fontSize: getSize(15),
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -243,7 +286,7 @@ class _refine_screenState extends State<refine_screen> {
           Container(
             padding: getPadding(left: 18, top: 5, right: 18, bottom: 5),
             decoration: BoxDecoration(
-              color: sample4Toggled ? Colors.black : Colors.white,
+              color: sample4Toggled ? textColor : Colors.white,
               borderRadius: BorderRadius.circular(30),
               border: Border.all(
                 color: Colors.grey,
@@ -263,8 +306,8 @@ class _refine_screenState extends State<refine_screen> {
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                  color: sample4Toggled ? Colors.white : Colors.grey,
-                  fontSize: 16,
+                  color: sample4Toggled ? Colors.white : textColor,
+                  fontSize: getSize(15),
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -274,7 +317,7 @@ class _refine_screenState extends State<refine_screen> {
           Container(
             padding: getPadding(left: 16, top: 5, right: 16, bottom: 5),
             decoration: BoxDecoration(
-              color: sample5Toggled ? Colors.black : Colors.white,
+              color: sample5Toggled ? textColor : Colors.white,
               borderRadius: BorderRadius.circular(30),
               border: Border.all(
                 color: Colors.grey,
@@ -294,8 +337,8 @@ class _refine_screenState extends State<refine_screen> {
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                  color: sample5Toggled ? Colors.white : Colors.grey,
-                  fontSize: 16,
+                  color: sample5Toggled ? Colors.white : textColor,
+                  fontSize: getSize(15),
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -305,7 +348,7 @@ class _refine_screenState extends State<refine_screen> {
           Container(
             padding: getPadding(left: 17, top: 5, right: 17, bottom: 5),
             decoration: BoxDecoration(
-              color: sample6Toggled ? Colors.black : Colors.white,
+              color: sample6Toggled ? textColor : Colors.white,
               borderRadius: BorderRadius.circular(30),
               border: Border.all(
                 color: Colors.grey,
@@ -324,8 +367,8 @@ class _refine_screenState extends State<refine_screen> {
                 "Dinning",
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: sample6Toggled ? Colors.white : Colors.grey,
-                  fontSize: 16,
+                  color: sample6Toggled ? Colors.white : textColor,
+                  fontSize: getSize(15),
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -348,7 +391,7 @@ class _refine_screenState extends State<refine_screen> {
           Container(
             padding: getPadding(left: 16, top: 5, right: 16, bottom: 5),
             decoration: BoxDecoration(
-              color: sample7Toggled ? Colors.black : Colors.white,
+              color: sample7Toggled ? textColor : Colors.white,
               borderRadius: BorderRadius.circular(30),
               border: Border.all(
                 color: Colors.grey,
@@ -368,8 +411,8 @@ class _refine_screenState extends State<refine_screen> {
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                  color: sample7Toggled ? Colors.white : Colors.grey,
-                  fontSize: 16,
+                  color: sample7Toggled ? Colors.white : textColor,
+                  fontSize: getSize(15),
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -379,7 +422,7 @@ class _refine_screenState extends State<refine_screen> {
           Container(
             padding: getPadding(left: 17, top: 5, right: 17, bottom: 5),
             decoration: BoxDecoration(
-              color: sample8Toggled ? Colors.black : Colors.white,
+              color: sample8Toggled ? textColor : Colors.white,
               borderRadius: BorderRadius.circular(30),
               border: Border.all(
                 color: Colors.grey,
@@ -398,8 +441,8 @@ class _refine_screenState extends State<refine_screen> {
                 "Dating",
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: sample8Toggled ? Colors.white : Colors.grey,
-                  fontSize: 16,
+                  color: sample8Toggled ? Colors.white : textColor,
+                  fontSize: getSize(15),
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -412,26 +455,24 @@ class _refine_screenState extends State<refine_screen> {
 
   Container status() {
     return Container(
-      padding: EdgeInsets.only(top: 2, left: 6, right: 6),
+      width: 335,
+      padding: EdgeInsets.only(left: 6, right: 6, bottom: 20),
       decoration: BoxDecoration(
           border: Border.all(
             color: Colors.grey,
             width: 1.0,
           ),
           borderRadius: BorderRadius.circular(10)),
-      child: Container(
-        height: 70,
-        width: 335,
-        color: Colors.white,
-        child: TextFormField(
-          style: TextStyle(color: Colors.black, fontSize: 16),
-          controller: statusController,
-          maxLines: null,
-          decoration: InputDecoration(
-              hintText: 'Write your letter here...',
-              border: InputBorder.none,
-              labelStyle: TextStyle(color: Colors.black, fontSize: 16)),
-        ),
+      child: TextFormField(
+        style: TextStyle(color: Colors.black, fontSize: 16),
+        controller: statusController,
+        maxLines: null,
+        maxLength: 250,
+        decoration: InputDecoration(
+            hintText: 'Write your letter here...',
+            border: InputBorder.none,
+            counterText: '',
+            labelStyle: TextStyle(color: Colors.black, fontSize: 16)),
       ),
     );
   }
@@ -441,14 +482,16 @@ class _refine_screenState extends State<refine_screen> {
       data: SliderThemeData(
         rangeThumbShape:
             RoundRangeSliderThumbShape(enabledThumbRadius: 5, elevation: 2),
-        thumbColor: Colors.black,
+        showValueIndicator: ShowValueIndicator.always,
         trackHeight: 1,
       ),
       child: Slider(
         allowedInteraction: SliderInteraction.tapAndSlide,
         label: _currentStrength.toString(),
-        activeColor: Colors.black,
+        activeColor: Color.fromARGB(255, 6, 5, 63),
         inactiveColor: Colors.grey,
+        thumbColor: Color.fromARGB(255, 6, 5, 63),
+        autofocus: true,
         min: 1,
         max: 100,
         divisions: 100,
@@ -465,16 +508,15 @@ class _refine_screenState extends State<refine_screen> {
   DropdownMenu<IconLabel> dropdownbox(
       List<DropdownMenuEntry<IconLabel>> iconEntries) {
     return DropdownMenu<IconLabel>(
+      initialSelection: IconLabel.smile,
       controller: iconController,
-      enableFilter: true,
+      enableFilter: false,
       width: 350,
-      textStyle: TextStyle(color: Colors.black, fontSize: 16),
+      textStyle: TextStyle(color: Colors.black, fontSize: getSize(15)),
       dropdownMenuEntries: iconEntries,
       inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          borderSide: BorderSide(color: Colors.grey),
-        ),
+        fillColor: Colors.white,
+        border: dropdown_border(),
         filled: true,
         focusedBorder: dropdown_border(),
         enabledBorder: dropdown_border(),

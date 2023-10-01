@@ -10,9 +10,9 @@ class blur_back extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+      filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
       child: Container(
-        color: Colors.white.withOpacity(0),
+        color: Colors.white.withOpacity(0.8),
       ),
     );
   }

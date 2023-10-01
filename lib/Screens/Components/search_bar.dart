@@ -20,60 +20,62 @@ class _SearchBarState extends State<Searchbar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(4.0),
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              height: getVerticalSize(28),
-              width: getHorizontalSize(280),
-              margin: EdgeInsets.only(top: 10, left: 14, right: 14),
-              padding: EdgeInsets.only(left: 20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(60),
-                border: Border.all(
-                  color: Colors.grey,
-                  width: 1.2,
-                ),
+      padding: const EdgeInsets.only(top: 14, left: 4, right: 4, bottom: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            height: getVerticalSize(30),
+            width: getHorizontalSize(280),
+            margin: EdgeInsets.only(left: 14, right: 14),
+            padding: EdgeInsets.only(left: 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(60),
+              border: Border.all(
+                color: Colors.grey,
+                width: 1.2,
               ),
-              child: Center(
-                  child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Icon(
-                    Icons.search,
-                    color: Colors.grey,
-                  ),
-                  SizedBox(width: getHorizontalSize(10)),
-                  Expanded(
-                      child: TextField(
-                    style: GoogleFonts.lato(color: Colors.grey),
+            ),
+            child: Center(
+                child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(
+                  Icons.search,
+                  color: Colors.grey,
+                ),
+                SizedBox(width: getHorizontalSize(10)),
+                Expanded(
+                    child: Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: TextField(
+                    style: TextStyle(color: Colors.grey),
                     controller: searchcontroller,
                     decoration: InputDecoration(
                       hintText: 'Search',
-                      hintStyle: GoogleFonts.lato(color: Colors.grey),
+                      hintStyle:
+                          GoogleFonts.lato(color: Colors.grey, fontSize: 14),
                       border: InputBorder.none,
                       alignLabelWithHint: true,
                     ),
-                  ))
-                ],
-              )),
+                  ),
+                ))
+              ],
+            )),
+          ),
+          InkWell(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: SvgPicture.asset(
+              Strings.kfillter,
+              height: 25,
             ),
-            InkWell(
-              onTap: () {
-                FocusScope.of(context).unfocus();
-              },
-              child: SvgPicture.asset(
-                Strings.kfillter,
-                height: 25,
-              ),
-            ),
-            SizedBox(width: 7),
-          ],
-        ),
+          ),
+          SizedBox(width: 7),
+        ],
       ),
     );
   }

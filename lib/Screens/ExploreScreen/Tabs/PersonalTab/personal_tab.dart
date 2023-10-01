@@ -1,14 +1,12 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, camel_case_types, sort_child_properties_last
-
-import 'dart:ui';
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, camel_case_types, sort_child_properties_last, prefer_final_fields, unused_field
 
 import 'package:flutter/material.dart';
 import 'package:netclan/Screens/Components/floating_action.dart';
-import 'package:netclan/Utils/colors.dart';
 import 'package:netclan/Utils/size_configure.dart';
 
 import '../../../Components/blur_back.dart';
 import '../../../Components/search_bar.dart';
+import 'widgets/card.dart';
 
 class personal_tab extends StatefulWidget {
   const personal_tab({super.key});
@@ -19,6 +17,49 @@ class personal_tab extends StatefulWidget {
 
 class _personal_tabState extends State<personal_tab>
     with SingleTickerProviderStateMixin {
+  List<Map<String, String>> _userList = [
+    {
+      'name': 'Biswajit Jena',
+      'description': 'Hi communnity! I am open to new connections',
+      'coffee': 'Coffee | Business | Friendship',
+      'distance': '100 m',
+      'det': 'Rourkela | Student',
+      'shortName': 'BJ',
+    },
+    {
+      'name': 'RAJAT KUMAR SWAIN',
+      'description': 'Hi communnity! I am open to new connections',
+      'coffee': 'Friendship| Movie',
+      'distance': '100-200 m',
+      'det': 'Rourkela | Student',
+      'shortName': 'RS',
+    },
+    {
+      'name': 'Vicky Star',
+      'description': 'Hi communnity! I am open to new connections',
+      'coffee': 'Coffee | Business',
+      'distance': '600 m',
+      'det': 'Odisha | Student',
+      'shortName': 'VS',
+    },
+    {
+      'name': 'Gopi Kishan Behera',
+      'description': 'Hi communnity! Gopi here, I am open to new connections',
+      'coffee': 'Games | Business | Friendship',
+      'distance': '1.2 KM',
+      'det': 'Rourkela | Businessman',
+      'shortName': 'GB',
+    },
+    {
+      'name': 'Lizarani Dhal',
+      'description': 'Hi communnity! Gopi here, I am open to new connections',
+      'coffee': 'Chat | Dating | Friendship | Travel',
+      'distance': '3.5 KM',
+      'det': 'Rourkela | App Developer',
+      'shortName': 'LD',
+    }
+  ];
+
   late AnimationController _animationController;
   late Animation<double> _translateButton;
   late Animation<double> _buttonAnimation;
@@ -28,7 +69,7 @@ class _personal_tabState extends State<personal_tab>
   @override
   void initState() {
     _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500))
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300))
           ..addListener(() {
             setState(() {});
           });
@@ -66,18 +107,26 @@ class _personal_tabState extends State<personal_tab>
               child: ListView.builder(
                 physics: BouncingScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: 10,
+                itemCount: _userList.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        detailed_card(),
+                        detailed_card(
+                          name: _userList[index]['name'].toString(),
+                          det: _userList[index]['det'].toString(),
+                          distance: _userList[index]['distance'].toString(),
+                          coffee: _userList[index]['coffee'].toString(),
+                          description:
+                              _userList[index]['description'].toString(),
+                        ),
                         Positioned(
                           top: 20,
                           left: 10,
-                          child: small_card(),
+                          child: small_card(
+                              short: _userList[index]['shortName'].toString()),
                         ),
                       ],
                     ),
@@ -88,196 +137,9 @@ class _personal_tabState extends State<personal_tab>
           ],
         ),
         _isExpanded ? blur_back() : Container(),
-        floating_button(_toggle, _buttonAnimation, _translateButton),
+        floating_button(
+            _toggle, _buttonAnimation, _translateButton, _isExpanded),
       ],
-    );
-  }
-}
-
-class small_card extends StatelessWidget {
-  const small_card({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Color.fromARGB(156, 46, 54, 59),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      width: getHorizontalSize(74),
-      height: getVerticalSize(76),
-      child: Center(
-        child: Text('RS', style: TextStyle(fontSize: 32)),
-      ),
-    );
-  }
-}
-
-class detailed_card extends StatefulWidget {
-  const detailed_card({
-    super.key,
-  });
-
-  @override
-  State<detailed_card> createState() => _detailed_cardState();
-}
-
-class _detailed_cardState extends State<detailed_card> {
-  bool isInvited = false;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 36),
-      child: Card(
-        elevation: 6,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          width: getHorizontalSize(360),
-          height: getVerticalSize(200),
-          child: Stack(
-            children: <Widget>[
-              Positioned(
-                top: 2,
-                right: 1,
-                child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        isInvited = !isInvited;
-                      });
-                    },
-                    child: Text(
-                      isInvited ? 'PENDING' : '+ INVITE',
-                      style: TextStyle(
-                          color: Color.fromARGB(156, 0, 5, 8),
-                          fontSize: getSize(15)),
-                    )),
-              ),
-              Positioned(top: 40, left: 60, child: container_1()),
-              Positioned(bottom: 10, left: 20, child: container_2()),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Container container_2() {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text('Coffee',
-                  style: TextStyle(
-                      fontSize: getSize(14),
-                      // color: Colors.grey,
-                      fontWeight: FontWeight.w400)),
-              SizedBox(width: 3),
-              divider(width: 2, height: 15),
-              SizedBox(width: 3),
-              Text('Business',
-                  style: TextStyle(
-                      fontSize: getSize(14),
-                      // color: Colors.grey,
-                      fontWeight: FontWeight.w400)),
-              SizedBox(width: 3),
-              divider(width: 2, height: 15),
-              SizedBox(width: 3),
-              Text('Friendship',
-                  style: TextStyle(
-                      fontSize: getSize(14),
-                      // color: Colors.grey,
-                      fontWeight: FontWeight.w400)),
-            ],
-          ),
-          SizedBox(height: getVerticalSize(5)),
-          SizedBox(
-            width: 250,
-            child: Text(
-              'Hi, community! I am open to new connections',
-              style:
-                  TextStyle(fontSize: getSize(14), overflow: TextOverflow.clip),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container container_1() {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'RAJAT KUMAR SWAIN',
-            style:
-                TextStyle(fontSize: getSize(15), fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 2.5),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text('Odisha',
-                  style: TextStyle(
-                      fontSize: getSize(14),
-                      color: Colors.grey,
-                      fontWeight: FontWeight.w400)),
-              SizedBox(width: 3),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.grey,
-                ),
-                width: 2,
-                height: 15,
-              ),
-              SizedBox(width: 3),
-              Text('Student',
-                  style: TextStyle(
-                      fontSize: getSize(14),
-                      color: Colors.grey,
-                      fontWeight: FontWeight.w400)),
-            ],
-          ),
-          SizedBox(height: 2.5),
-          Text(
-            'Within 100-200m',
-            style: TextStyle(fontSize: getSize(14)),
-          ),
-          SizedBox(height: 2.5),
-          Container(
-              width: 120,
-              height: 10,
-              decoration: BoxDecoration(
-                  color: Colors.grey, borderRadius: BorderRadius.circular(16)),
-              child: Stack(
-                children: [
-                  Container(
-                    width: 75,
-                    height: 12,
-                    decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(16),
-                          bottomLeft: Radius.circular(16),
-                        )),
-                  ),
-                ],
-              ))
-        ],
-      ),
     );
   }
 }

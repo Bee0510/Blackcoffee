@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, unused_field, prefer_final_fields, avoid_unnecessary_containers
 
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:netclan/Screens/ChatScreen/chat_screen.dart';
@@ -13,6 +12,8 @@ import 'package:netclan/Screens/RefineScreen/refine_screen.dart';
 import 'package:netclan/Utils/Strings.dart';
 import 'package:netclan/Utils/colors.dart';
 import 'package:netclan/Utils/size_configure.dart';
+
+import '../Components/drawer.dart';
 
 class home_screen extends StatefulWidget {
   const home_screen({super.key});
@@ -62,185 +63,95 @@ class _home_screenState extends State<home_screen>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        key: _scaffoldKey,
-        appBar: AppBar(
-          backgroundColor: Colour.primaryColor,
-          title: Container(
-            height: getVerticalSize(50),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Row(
-                  children: [
-                    SizedBox(
-                      width: getHorizontalSize(2),
-                    ),
-                    Text(
-                      'Howdy Bee Bee!!',
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.black,
+      key: _scaffoldKey,
+      appBar: AppBar(
+        backgroundColor: Colour.primaryColor,
+        title: Container(
+          height: getVerticalSize(50),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Row(
+                children: [
+                  SizedBox(
+                    width: getHorizontalSize(2),
+                  ),
+                  Text(
+                    'Howdy Vishal Behera!!',
+                    style: TextStyle(
+                        fontSize: getSize(16),
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: getVerticalSize(4),
+              ),
+              Row(
+                children: [
+                  SvgPicture.asset(
+                    Strings.klocation,
+                    height: getHorizontalSize(12),
+                  ),
+                  Text('Sector 1, Rourkela',
                       style: TextStyle(
-                          fontSize: getSize(15),
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ],
+                        fontSize: getSize(12),
+                        color: Colors.white,
+                      )),
+                ],
+              ),
+            ],
+          ),
+        ),
+        leading: IconButton(
+          icon: SvgPicture.asset(
+            Strings.khamburger,
+            height: 60,
+          ),
+          onPressed: () {
+            _scaffoldKey.currentState!.openDrawer();
+          },
+        ),
+        actions: [
+          Container(
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                IconButton(
+                  icon: SvgPicture.asset(
+                    Strings.kchecklist,
+                    height: 30,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => refine_screen()));
+                  },
                 ),
-                SizedBox(
-                  height: getVerticalSize(4),
-                ),
-                Row(
-                  children: [
-                    SvgPicture.asset(
-                      Strings.klocation,
-                      height: getHorizontalSize(12),
-                    ),
-                    Text('Sector 1, Rourkela',
-                        style: TextStyle(
-                          fontSize: getSize(12),
-                          color: Colors.white,
-                        )),
-                  ],
+                Positioned(
+                  bottom: 2,
+                  right: 6,
+                  child: Text(
+                    'Refine',
+                    style:
+                        TextStyle(color: Colors.white, fontSize: getSize(12)),
+                  ),
                 ),
               ],
             ),
           ),
-          leading: IconButton(
-            icon: SvgPicture.asset(
-              Strings.khamburger,
-              height: 60,
-            ),
-            onPressed: () {
-              _scaffoldKey.currentState!.openDrawer();
-            },
-          ),
-          actions: [
-            Container(
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  IconButton(
-                    icon: SvgPicture.asset(
-                      Strings.kchecklist,
-                      height: 30,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => refine_screen()));
-                    },
-                  ),
-                  Positioned(
-                    bottom: 2,
-                    right: 6,
-                    child: Text(
-                      'Refine',
-                      style:
-                          TextStyle(color: Colors.white, fontSize: getSize(12)),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        drawer: drawer(),
-        body: Stack(
-          children: [
-            _pages[_currentIndex],
-            // _isExpanded
-            //     ? BackdropFilter(
-            //         filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-            //         child: Container(
-            //           color: Colors.white.withOpacity(0),
-            //         ),
-            //       )
-            //     : Container(),
-          ],
-        ),
-        bottomNavigationBar: bottom_navbar(context),
-        // floatingActionButton: _currentIndex == 0 ? floating_button() : null,
+        ],
       ),
-    );
-  }
-
-  Positioned floating_button() {
-    return Positioned(
-      bottom: getVerticalSize(16), // Adjust the vertical position as needed
-      right: getHorizontalSize(16),
-      child: Stack(
-        alignment: Alignment.bottomRight,
+      drawer: drawer(),
+      body: Stack(
         children: [
-          transformer(3.5, 'Notes'),
-          transformer(6.5, 'Jobs'),
-          transformer(18.5, 'Netclan Groups'),
-          transformer(15.5, 'Business Cards'),
-          transformer(9.5, 'Buy-Sell-Rent'),
-          transformer(12.5, 'Matrimony'),
-          transformer(21.5, 'Dating'),
-          FloatingActionButton(
-            backgroundColor: const Color.fromARGB(156, 6, 21, 46),
-            onPressed: _toggle,
-            child: AnimatedIcon(
-              icon: AnimatedIcons.menu_close,
-              progress: _buttonAnimation,
-            ),
-          ),
+          _pages[_currentIndex],
         ],
       ),
-    );
-  }
-
-  Transform transformer(double time, String text) {
-    return Transform(
-      transform: Matrix4.translationValues(
-        0,
-        _translateButton.value * time,
-        0,
-      ),
-      child: Container(
-        width: 200,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(
-              text,
-              style: TextStyle(color: Colors.black),
-            ),
-            SizedBox(width: getHorizontalSize(16)),
-            Container(
-                height: 40,
-                width: 40,
-                child: FloatingActionButton(
-                    backgroundColor: Color.fromARGB(156, 255, 179, 0),
-                    onPressed: () {},
-                    child: Icon(Icons.add))),
-            SizedBox(width: getHorizontalSize(12)),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Drawer drawer() {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            child: Text('Drawer Header'),
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-          ),
-          ListTile(
-            title: Text('Item 1'),
-          ),
-          ListTile(
-            title: Text('Item 2'),
-          ),
-        ],
-      ),
+      bottomNavigationBar: bottom_navbar(context),
     );
   }
 
@@ -250,6 +161,7 @@ class _home_screenState extends State<home_screen>
       child: BottomNavigationBar(
         showSelectedLabels: true,
         showUnselectedLabels: true,
+        enableFeedback: true,
         onTap: (index) {
           setState(() {
             _currentIndex = index;
@@ -264,43 +176,41 @@ class _home_screenState extends State<home_screen>
         type: BottomNavigationBarType.fixed,
         elevation: 16,
         items: [
-          BottomNavigationBarItem(
-            label: 'Explore',
-            icon: Icon(Icons.remove_red_eye),
-            activeIcon: Icon(
-              Icons.remove_red_eye,
-            ),
-          ),
-          BottomNavigationBarItem(
-            label: 'Network',
-            icon: Icon(Icons.cyclone),
-            activeIcon: Icon(
-              Icons.home_filled,
-            ),
-          ),
-          BottomNavigationBarItem(
-            label: 'Chat',
-            icon: Icon(Icons.chat),
-            activeIcon: Icon(
-              Icons.home_filled,
-            ),
-          ),
-          BottomNavigationBarItem(
-            label: 'Contacts',
-            icon: Icon(Icons.contacts),
-            activeIcon: Icon(
-              Icons.widgets,
-            ),
-          ),
-          BottomNavigationBarItem(
-            label: 'Groups',
-            icon: Icon(Icons.people),
-            activeIcon: Icon(
-              Icons.mail,
-            ),
-          ),
+          bottom_navbar_items('Explore', Strings.eyeoff, Strings.eyeon),
+          bottom_navbar_items('Network', Strings.networkoff, Strings.networkon),
+          bottom_navbar_items('Chat', Strings.chatoff, Strings.chaton),
+          bottom_navbar_items(
+              'Contacts', Strings.contactoff, Strings.contacton),
+          bottom_navbar_items('Groups', Strings.hash, Strings.hash),
         ],
       ),
+    );
+  }
+
+  BottomNavigationBarItem bottom_navbar_items(
+      String title, String icon, String activeIcon) {
+    return BottomNavigationBarItem(
+      label: title,
+      icon: svg_pics(icon: icon),
+      activeIcon: svg_pics(icon: activeIcon),
+    );
+  }
+}
+
+class svg_pics extends StatelessWidget {
+  const svg_pics({
+    super.key,
+    required this.icon,
+  });
+  final String icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return SvgPicture.asset(
+      icon,
+      fit: BoxFit.contain,
+      height: getSize(24),
+      color: Colour.textColor,
     );
   }
 }
